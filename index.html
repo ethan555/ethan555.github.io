@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://kit.fontawesome.com/7ad5218c7d.js" crossorigin="anonymous"></script>
+        <style>
+            html {
+                height: 100%;
+            }
+
+            body {
+                background-color: #050505;
+                color: white;
+                font-family: "Segoe UI",Arial,sans-serif;
+                height: 100%;
+            }
+
+            header {
+                height: 40%;
+                margin: auto auto;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+            }
+
+            tabs {
+                position: relative;
+                height: 60%;
+                width: 100%;
+            }
+
+            hr {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <div class="info">
+                <h1>Ethan Williams</h1>
+                <h2>Software Developer, Composer</h2>
+                <h2 class="buttons">
+                    <a class="link" href="resume.pdf">
+                        <i class="fas fa-file"></i>
+                    </a>
+                    <a class="link" href="mailto:ethan555williams@gmail.com">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a class="link" href="https://www.linkedin.com/in/ethanwilliams555/">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a class="link" href="https://github.com/ethan555">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a class="link" href="https://www.youtube.com/channel/UCDOAx_-3ldouqwMcN3K0-kw">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a class="link" href="https://soundcloud.com/user-25543969">
+                        <i class="fab fa-soundcloud"></i>
+                    </a>
+                </h2>
+            </div>
+        </header>
+        <tabs>
+            <div class="bar">
+                <button class="bar-item" onclick="showTab('Projects')">Projects</button>
+                <button class="bar-item" onclick="showTab('Games')">Games</button>
+                <button class="bar-item" onclick="showTab('Music')">Music</button>
+            </div>
+            
+            <div id="Projects" class="tab">
+                <div class="tab-header">Projects</div>
+                <hr>
+                <a class="tab-link" href="https://audemos.space/">
+                    <span class="tab-item">
+                        audemos.space - Audio sharing website, allows private sharing of audio files up to 250 MB in size for 3 days
+                    </span>
+                </a>
+                <p>See github for more projects</p>
+            </div>
+
+            <div id="Games" class="tab" style="display:none">
+                <div class="tab-header">Games</div>
+                <hr>
+                <a class="tab-link" href="">
+                    <span class="tab-item">
+                        Ship Game - Space Exploration/Combat Game
+                    </span>
+                </a>
+                <div>
+                    <img class="image" src="ShipGame1.png">
+                    <img class="image" src="ShipGame2.png">
+                </div>
+                <a class="tab-link" href="">
+                    <span class="tab-item">
+                        Spellsword - Top-Down Action RPG
+                    </span>
+                </a>
+                <div>
+                    <img class="image" src="TopDownGame1.png">
+                    <img class="image" src="TopDownGame2.png">
+                </div>
+                <p>See github for more projects</p>
+            </div>
+
+            <div id="Music" class="tab" style="display:none">
+                <div class="tab-header">Music</div>
+                <hr>
+                <div>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/U5HAo_7wTJY">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/vsn1UUbgNcY">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/yeo5qQYDRFs">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/P0slAiEEdiE">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/A4Cxy6EMX2I">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/wmy5NaYS9Oo">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/RgWoiyHgZvE">
+                    </iframe>
+                    <iframe class="music" width="420" height="315" frameborder="0"
+                        src="https://www.youtube.com/embed/JaYrTe7Bi6g">
+                    </iframe>
+                </div>
+            </div>
+        </tabs>
+    </body>
+
+    <script>
+        function showTab(tabName) {
+            var i;
+            var x = document.getElementsByClassName("tab");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
+    </script>
+
+</html>

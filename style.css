@@ -1,0 +1,112 @@
+.info {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 0px;
+}
+
+h2 {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin-bottom: 0px;
+}
+
+.buttons {
+    width: 100%;
+}
+
+.link {
+    color: dodgerblue;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.link-button {
+    color: dodgerblue;
+    text-decoration: none;
+    padding: 10px;
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 4px;
+}
+
+.tab-section {
+    width: 100%;
+    display: block;
+    text-align: left;
+}
+
+.bar {
+    display: block;
+    width: 90%;
+    padding-left: 10%;
+    box-shadow: 0 0px 5px white;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.bar-item {
+    font-size: 1em;
+    display: inline-block;
+    background-color: #050505;
+    color: white;
+    border: none;
+    user-select: none;
+    outline: 0;
+    padding: 10px;
+}
+
+.bar-item:focus {
+    background-color: black;
+    color: dodgerblue;
+}
+
+.bar-item:hover {
+    background-color: white;
+    color: black;
+}
+
+.tab {
+    margin-left: 10%;
+}
+
+.tab-header {
+    font-weight: bold;
+    font-size: 1.5em;
+    padding-left: 10px;
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.tab-link {
+    text-decoration: none;
+    padding: 0px;
+}
+
+.tab-item {
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.tab-item:hover {
+    transition-duration: 0.2s;
+    box-shadow: 0 0px 0px 0 black, 0 0px 5px 0 white;
+}
+
+.music {
+    display: inline-block;
+}
+
+.image {
+    max-width:50%;
+    max-height:50%;
+}
+  
