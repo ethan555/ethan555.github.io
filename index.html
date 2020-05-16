@@ -1,44 +1,296 @@
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <link rel="stylesheet" href="style.css">
+<html>
+   <head>
+      <title>Ethan Williams</title>
+	  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	  <meta content="utf-8" http-equiv="encoding">
+	  <link rel="stylesheet" href="style.css">
         <link rel="icon" href="favicon.png" type="image/png">
         <script src="https://kit.fontawesome.com/7ad5218c7d.js" crossorigin="anonymous"></script>
-        <style>
-            html {
-                height: 100%;
-            }
+   </head>
+   <body>
+		<script id="eclipseshader" type="shader">
+			#ifdef GL_ES
+			precision mediump float;
+			#endif
 
-            body {
-                background-color: #050505;
-                color: white;
-                font-family: "Segoe UI",Arial,sans-serif;
-                height: 100%;
-            }
+			#extension GL_OES_standard_derivatives : enable
 
-            header {
-                height: 40%;
-                margin: auto auto;
-                align-items: center;
-                justify-content: center;
-                display: flex;
-            }
+			uniform float time;
+			uniform float resolution_x;
+			uniform float resolution_y;
+			float random(vec2 st) {
+				return fract(sin(dot(st.xy, vec2(12.9898,78.233)))* 43758.5453123);
+			}
 
-            tabs {
-                position: relative;
-                height: 60%;
-                width: 100%;
-            }
+			float random(float x) {
+				return random(vec2(x, x));
+			}
+			vec3 random3(vec3 st){
+				st = vec3(dot(st,vec3(127.1,311.7,240.2)),
+					  dot(st,vec3(269.5,183.3,346.5)),
+					  dot(st,vec3(183.6,221.9,148.0)));
+				return -1.0 + 2.0*fract(sin(st)*43758.5453123);
+			}
 
-            hr {
-                margin-bottom: 20px;
-            }
-        </style>
-    </head>
+			float gradient(vec3 st) {
+				vec3 i = floor(st);
+				vec3 f = fract(st);
 
-    <body>
-        <header>
+				// Quintic
+				vec3 u = f*f*f*(f*(f*6.-15.)+10.);
+
+				return mix(mix(
+					mix(dot(random3(i + vec3(0.,0.,0.)), f - vec3(0.,0.,0.)),
+						dot(random3(i + vec3(1.,0.,0.)), f - vec3(1.,0.,0.)), u.x),
+					mix(dot(random3(i + vec3(0.,1.,0.)), f - vec3(0.,1.,0.)),
+						dot(random3(i + vec3(1.,1.,0.)), f - vec3(1.,1.,0.)), u.x), u.y),
+				mix(mix(dot(random3(i + vec3(0.,0.,1.)), f - vec3(0.,0.,1.)),
+						dot(random3(i + vec3(1.,0.,1.)), f - vec3(1.,0.,1.)), u.x),
+					mix(dot(random3(i + vec3(0.,1.,1.)), f - vec3(0.,1.,1.)),
+						dot(random3(i + vec3(1.,1.,1.)), f - vec3(1.,1.,1.)), u.x), u.y), u.z);
+			}
+
+			const mat3 rot1 = mat3(-0.37, 0.36, 0.85,-0.14,-0.93, 0.34,0.92, 0.01,0.4);
+
+			float gradient_octaves(vec3 st, int octaves) {
+				return 0.6*gradient(st)
+					  +0.4*gradient(2.*st*rot1);
+			}
+
+			void main( void ) {
+
+				float scale = 10.;
+				vec2 resolution = vec2(resolution_x, resolution_y);
+				vec2 center = vec2(.5, (.8 * resolution.y / resolution.x));
+
+				vec2 position = (gl_FragCoord.xy) / resolution.x;
+
+				vec4 color = vec4(0., 0., 0., 0.);
+				float t = mod(time*0.15, 10000.);
+				float t2 = mod(time*0.025, 10000.);
+
+				float dist = distance(position.xy, center)*scale;
+				vec3 randposition = vec3(position * 5.+500., t);
+				float value = 2.*pow(6.*pow(.5 + gradient_octaves(randposition, 2)*.5, 6.), 2.);
+				float starvalue = 0.;
+				vec3 stars = vec3(0.);
+				float eclipsedist = .2;
+				if (dist < eclipsedist * scale) {
+					value *= pow(dist/(eclipsedist * scale),10.) * scale;
+				} else {
+					value *= ((eclipsedist * scale) / (dist - eclipsedist));
+					value *= pow((eclipsedist * scale)/dist, 10.) * scale;
+
+					vec3 starposition = vec3(position * 1000., t2);
+					starvalue = pow(.75 + gradient_octaves(starposition, 2)*.5, 1.);
+					stars = mix(vec3(0.,0.,0.), vec3(1.,1.,1.), smoothstep(0.99, 1.0, vec3(starvalue)));
+					stars = clamp(stars, 0.0, 1.0);
+				}
+
+				vec3 color_dist = vec3(.6, .2, .85);
+				color.rgb = color_dist * vec3(value, value, value);
+				color.rgb += stars;
+
+				gl_FragColor = color;
+
+			}
+
+		</script>
+		<script id="aurorashader" type="shader">
+			#ifdef GL_ES
+			precision mediump float;
+			#endif
+
+			#extension GL_OES_standard_derivatives : enable
+
+			uniform float time;
+			//uniform vec2 resolution;
+			uniform float resolution_x;
+			uniform float resolution_y;
+
+			float random(vec2 st) {
+				return fract(sin(dot(st.xy, vec2(12.9898,78.233)))* 43758.5453123);
+			}
+
+			float random(float x) {
+				return random(vec2(x, x));
+			}
+
+			vec2 random2(vec2 st){
+				st = vec2( dot(st,vec2(127.1,311.7)),
+						  dot(st,vec2(269.5,183.3)) );
+				return -1.0 + 2.0*fract(sin(st)*43758.5453123);
+			}
+
+			vec3 random3(vec3 st){
+				st = vec3(dot(st,vec3(127.1,311.7,240.2)),
+					  dot(st,vec3(269.5,183.3,346.5)),
+					  dot(st,vec3(183.6,221.9,148.0)));
+				return -1.0 + 2.0*fract(sin(st)*43758.5453123);
+			}
+
+			float gradient2D(vec2 st) {
+				vec2 i = floor(st);
+				vec2 f = fract(st);
+
+				vec2 u = f*f*f*(f*(f*6.-15.)+10.);
+
+				return mix(
+					mix(dot(random2(i + vec2(0.,0.)), f - vec2(0.,0.)),
+						dot(random2(i + vec2(1.,0.)), f - vec2(1.,0.)), u.x),
+					mix(dot(random2(i + vec2(0.,1.)), f - vec2(0.,1.)),
+						dot(random2(i + vec2(1.,1.)), f - vec2(1.,1.)), u.x), u.y);
+			}
+
+			float gradient(vec3 st) {
+				vec3 i = floor(st);
+				vec3 f = fract(st);
+
+				// Quintic
+				vec3 u = f*f*f*(f*(f*6.-15.)+10.);
+
+				return mix(mix(
+					mix(dot(random3(i + vec3(0.,0.,0.)), f - vec3(0.,0.,0.)),
+						dot(random3(i + vec3(1.,0.,0.)), f - vec3(1.,0.,0.)), u.x),
+					mix(dot(random3(i + vec3(0.,1.,0.)), f - vec3(0.,1.,0.)),
+						dot(random3(i + vec3(1.,1.,0.)), f - vec3(1.,1.,0.)), u.x), u.y),
+				mix(mix(dot(random3(i + vec3(0.,0.,1.)), f - vec3(0.,0.,1.)),
+						dot(random3(i + vec3(1.,0.,1.)), f - vec3(1.,0.,1.)), u.x),
+					mix(dot(random3(i + vec3(0.,1.,1.)), f - vec3(0.,1.,1.)),
+						dot(random3(i + vec3(1.,1.,1.)), f - vec3(1.,1.,1.)), u.x), u.y), u.z);
+			}
+
+			const mat3 rot1 = mat3(-0.37, 0.36, 0.85,-0.14,-0.93, 0.34,0.92, 0.01,0.4);
+			const mat3 rot2 = mat3(-0.55,-0.39, 0.74, 0.33,-0.91,-0.24,0.77, 0.12,0.63);
+			const mat3 rot3 = mat3(-0.71, 0.52,-0.47,-0.08,-0.72,-0.68,-0.7,-0.45,0.56);
+
+			float gradient_octaves(vec3 st) {
+				return 0.6*gradient(st)
+					  +0.4*gradient(2.*st*rot1);
+					  //+0.1333333*gradient(4.*st*rot2);
+					  //+0.0666667*gradient(8.*st*rot3);
+			}
+
+			void main( void ) {
+				vec2 resolution = vec2(resolution_x, resolution_y);
+				vec2 position = gl_FragCoord.xy / resolution.y;
+
+				vec4 color = vec4(0., 0., 0., 0.);
+				float t = mod(time*0.15, 10000.);
+				float t2 = mod(time*0.00001, 10000.);
+				float wave = gradient2D(vec2(position.x*.25,t2));
+				vec3 starposition = vec3(position * 1000., t2);
+				position.y += wave;
+				float value = (.5 + gradient_octaves(vec3(position.x*8., position.x*2.+position.y/6., t))*.5);
+
+				float ycheat = .95;
+				value = value*((pow(sin(ycheat+position.y*3.5)*.5+.5,10.))*.5 +
+					   (pow(sin(ycheat+position.y*1.5)*.5+.5,8.))*.5);
+				vec3 color_dist = vec3(0.1, .9, .6);
+
+				float starvalue = 0.;
+				vec3 stars = vec3(0.);
+				starvalue = pow(.75 + gradient_octaves(starposition)*.5, 1.);
+				stars = mix(vec3(0.,0.,0.), vec3(1.,1.,1.), smoothstep(0.99, 1.0, vec3(starvalue)));
+				stars = clamp(stars, 0.0, 1.0);
+				color.rgb = color_dist * vec3(value, pow(value, 2.)*2., value) + stars;
+				color.a = value;
+
+				gl_FragColor = color;
+
+			}
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/pixi.js/3.0.7/pixi.js"></script>
+
+		<script>
+			var width, height;
+			var renderer;
+			var stage;
+			var eclipse;
+			var uniforms;
+			var shaderCode;
+			var simpleShader;
+			Init();
+			
+			function Init() {
+				var scale = .98;
+				// Get the screen width and height
+				width = window.innerWidth - 18.0;//Math.floor(window.innerWidth * scale);
+				height = window.innerHeight;
+				// Chooses either WebGL if supported or falls back to Canvas rendering
+				renderer = new PIXI.autoDetectRenderer(width, height);
+				// Add the render view object into the page
+				document.body.appendChild(renderer.view);
+
+				// The stage is the root container that will hold everything in our scene
+				stage = new PIXI.Container();
+
+				// Load an image and create an object
+				eclipse = new PIXI.Graphics();//"https://image.shutterstock.com/image-photo/austin-texas-usa-sunrise-skyline-260nw-681676399.jpg");
+				// Set it at the center of the screen
+				eclipse.x = width / 2;
+				eclipse.y = height / 2;
+				// Make sure the center point of the image is at its center, instead of the default top left
+				//eclipse.anchor.set(0.5);
+				eclipse.drawRect(-width/2, -height/2, width, height);
+				// Add it to the screen
+				stage.addChild(eclipse);
+
+				uniforms = {}
+				uniforms.time = {
+				  type:"f",
+				  value:0
+				}
+				uniforms.resolution_x = {
+				  type:"f",
+				  value:width
+				}
+				uniforms.resolution_y = {
+				  type:"f",
+				  value:height
+				}
+
+				function animate() {
+					// start the timer for the next animation loop
+					// this is the main render call that makes pixi draw your container and its children.
+					renderer.render(stage);
+					uniforms.time.value += 0.02;
+					requestAnimationFrame(animate);
+				};
+
+				animate();
+
+				//Get shader code as a string
+				shaderCode = document.getElementById("aurorashader").innerHTML
+				//Create our Pixi filter using our custom shader code
+				simpleShader = new PIXI.AbstractFilter('',shaderCode,uniforms);
+				//Apply it to our object
+				eclipse.filters = [simpleShader]
+			};
+			
+			$(window).resize(function(){
+				width = window.innerWidth;
+				height = window.innerHeight;
+				uniforms.resolution_x = {
+				  type:"f",
+				  value:width
+				}
+				uniforms.resolution_y = {
+				  type:"f",
+				  value:height
+				}
+				//eclipse.drawRect(-width/2, -width/2, width, height);
+				renderer.view.style.width = width + 'px';
+				renderer.view.style.height = height + 'px';
+				renderer.width = width;
+				renderer.height = height;
+				renderer.resize(width, height);
+				
+			});
+
+		</script>
+		<header>
             <div class="info">
                 <h1>Ethan Williams</h1>
                 <h2>Software Developer, Composer</h2>
@@ -137,17 +389,16 @@
                 </div>
             </div>
         </tabs>
-    </body>
-
-    <script>
-        function showTab(tabName) {
-            var i;
-            var x = document.getElementsByClassName("tab");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            document.getElementById(tabName).style.display = "block";
-        }
-    </script>
-
+		
+		<script>
+			function showTab(tabName) {
+				var i;
+				var x = document.getElementsByClassName("tab");
+				for (i = 0; i < x.length; i++) {
+					x[i].style.display = "none";
+				}
+				document.getElementById(tabName).style.display = "block";
+			}
+		</script>
+	</body>
 </html>

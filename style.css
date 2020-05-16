@@ -1,3 +1,39 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	color: white;
+	background: black;
+	font-family: "Segoe UI",Arial,sans-serif;
+	height: 99%;
+	width: 90%;
+}
+
+header {
+	position: absolute;
+	top:0%;
+	width:99%;
+	height: 40%;
+	margin: auto auto;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+
+tabs {
+	position: absolute;
+	top: 40%;
+	height: 60%;
+	width: 99%;
+}
+
+hr {
+	margin-bottom: 20px;
+}
+
 .info {
     width: 100%;
     display: block;
@@ -22,9 +58,15 @@ h3 {
 }
 
 .link {
-    color: dodgerblue;
+    transition-duration: 0.2s;
+    color: slateblue;
     text-decoration: none;
     padding: 10px;
+}
+
+.link:hover {
+    transition-duration: 0.2s;
+    color: white;
 }
 
 .link-button {
@@ -46,12 +88,13 @@ h3 {
     display: block;
     width: 90%;
     padding-left: 10%;
-    box-shadow: 0 0px 5px white;
     border: 1px solid white;
-    border-radius: 5px;
+    border-radius: 0px;
+    background-color: #050505;
 }
 
 .bar-item {
+    transition-duration: 0.2s;
     font-size: 1em;
     display: inline-block;
     background-color: #050505;
@@ -60,14 +103,17 @@ h3 {
     user-select: none;
     outline: 0;
     padding: 10px;
+    padding-left: 10px;
 }
 
 .bar-item:focus {
+    transition-duration: 0.2s;
     background-color: black;
     color: dodgerblue;
 }
 
 .bar-item:hover {
+    transition-duration: 0.2s;
     background-color: white;
     color: black;
 }
@@ -91,6 +137,7 @@ h3 {
 }
 
 .tab-item {
+    transition-duration: 0.2s;
     padding: 10px;
     border-radius: 5px;
     color: white;
