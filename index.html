@@ -177,12 +177,12 @@
 
 				vec4 color = vec4(0., 0., 0., 0.);
 				float t = mod(time*0.15, 10000.);
-				float t2 = mod(time*0.00001, 10000.);
+				float t2 = mod(time*0.01, 10000.);
 				float wave = gradient2D(vec2(position.x*.25,t2));
-				vec3 starposition = vec3(position * 10000., t2);
+				vec3 starposition = vec3(position * 5000., t2);
 				position.y += wave;
 				float value = (.5 + gradient_octaves(vec3(position.x*8., position.x*2.+position.y/6., t))*.5);
-				float space = value * 5.;
+				float space = value * 7.;
 
 				float ycheat = .95;
 				value = value*((pow(sin(ycheat+position.y*3.5)*.5+.5,10.))*.5 +
