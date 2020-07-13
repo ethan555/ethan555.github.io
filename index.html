@@ -9,6 +9,7 @@
    </head>
    <body>
 		<script id="eclipseshader" type="shader">
+			/// Written by Ethan Williams, 2020
 			#ifdef GL_ES
 			precision mediump float;
 			#endif
@@ -97,6 +98,7 @@
 
 		</script>
 		<script id="aurorashader" type="shader">
+			/// Written by Ethan Williams, 2020
 			#ifdef GL_ES
 			precision mediump float;
 			#endif
@@ -179,7 +181,7 @@
 				float t = mod(time*0.15, 10000.);
 				float t2 = mod(time*0.01, 10000.);
 				float wave = gradient2D(vec2(position.x*.25,t2));
-				vec3 starposition = vec3(position * 5000., t2);
+				vec3 starposition = vec3((position+11.) * 5000., t2);
 				position.y += wave;
 				float value = (.5 + gradient_octaves(vec3(position.x*8., position.x*2.+position.y/6., t))*.5);
 				float space = value * 7.;
